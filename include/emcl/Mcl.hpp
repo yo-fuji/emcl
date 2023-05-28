@@ -40,7 +40,7 @@ public:
                 double& x_var, double& y_var, double& t_var,
                 double& xy_cov, double& yt_cov, double& tx_cov);
 
-  void simpleReset(void);
+  void simpleReset();
 
 protected:
   Pose* last_odom_;
@@ -51,9 +51,9 @@ protected:
   int msg_seq_;
 
   double normalizeAngle(double t);
-  void resampling(void);
-  double normalizeBelief(void);
-  void resetWeight(void);
+  void resampling();
+  double normalizeBelief();
+  void resetWeight();
 
   std::shared_ptr<OdomModel> odom_model_;
   std::shared_ptr<LikelihoodFieldMap> map_;

@@ -84,7 +84,7 @@ void ExpResetMcl::sensorUpdate(double lidar_x, double lidar_y, double lidar_t, b
   processed_seq_ = scan_.seq_;
 }
 
-void ExpResetMcl::expansionReset(void)
+void ExpResetMcl::expansionReset()
 {
   for (auto& p : particles_) {
     double length = 2 * (static_cast<double>(rand()) / RAND_MAX - 0.5) * expansion_radius_position_;

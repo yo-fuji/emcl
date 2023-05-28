@@ -29,12 +29,12 @@ void OdomModel::setDev(double length, double angle)
   rot_dev_ = sqrt(fabs(length) * rot_var_per_fw_ + fabs(angle) * rot_var_per_rot_);
 }
 
-double OdomModel::drawFwNoise(void)
+double OdomModel::drawFwNoise()
 {
   return std_norm_dist_(engine_) * fw_dev_;
 }
 
-double OdomModel::drawRotNoise(void)
+double OdomModel::drawRotNoise()
 {
   return std_norm_dist_(engine_) * rot_dev_;
 }

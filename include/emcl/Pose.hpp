@@ -18,20 +18,20 @@ public:
 
   void set(double x, double y, double t);
   void set(const Pose& p);
-  std::string to_s(void);
+  std::string to_s();
 
-  void normalizeAngle(void);
+  void normalizeAngle();
   void move(double length, double direction, double rotation,
             double fw_noise, double rot_noise);
 
   const Pose operator-(const Pose& p) const;
   Pose& operator=(const Pose& p);
 
-  bool nearlyZero(void);
+  bool nearlyZero();
 
   double x_, y_, t_;
 
-  uint16_t get16bitRepresentation(void);
+  uint16_t get16bitRepresentation();
   static uint16_t get16bitRepresentation(double);
 };
 

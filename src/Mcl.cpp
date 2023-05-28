@@ -44,7 +44,7 @@ Mcl::~Mcl()
   delete prev_odom_;
 }
 
-void Mcl::resampling(void)
+void Mcl::resampling()
 {
   std::vector<double> accum;
   accum.push_back(particles_[0].w_);
@@ -235,7 +235,7 @@ void Mcl::setScan(const sensor_msgs::msg::LaserScan::ConstSharedPtr& msg)
   scan_.range_max_ = msg->range_max;
 }
 
-double Mcl::normalizeBelief(void)
+double Mcl::normalizeBelief()
 {
   double sum = 0.0;
   for (const auto& p : particles_)
@@ -250,7 +250,7 @@ double Mcl::normalizeBelief(void)
   return sum;
 }
 
-void Mcl::resetWeight(void)
+void Mcl::resetWeight()
 {
   for (auto& p : particles_)
     p.w_ = 1.0 / particles_.size();
@@ -265,7 +265,7 @@ void Mcl::initialize(double x, double y, double t)
   resetWeight();
 }
 
-void Mcl::simpleReset(void)
+void Mcl::simpleReset()
 {
   std::vector<Pose> poses;
   map_->drawFreePoses(particles_.size(), poses);

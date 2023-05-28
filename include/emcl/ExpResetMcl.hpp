@@ -32,7 +32,7 @@ private:
   double expansion_radius_position_;
   double expansion_radius_orientation_;
 
-  void expansionReset(void);
+  void expansionReset();
 };
 
 } // namespace emcl

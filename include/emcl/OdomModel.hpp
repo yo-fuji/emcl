@@ -14,8 +14,8 @@ class OdomModel
 public:
   OdomModel(double ff, double fr, double rf, double rr);
   void setDev(double length, double angle);
-  double drawFwNoise(void);
-  double drawRotNoise(void);
+  double drawFwNoise();
+  double drawRotNoise();
 
 private:
   double fw_dev_;

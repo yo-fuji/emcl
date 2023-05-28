@@ -71,7 +71,7 @@ void LikelihoodFieldMap::setLikelihood(int x, int y, double range)
                                               std::min(weights[abs(i)], weights[abs(j)]));
 }
 
-void LikelihoodFieldMap::normalize(void)
+void LikelihoodFieldMap::normalize()
 {
   double maximum = 0.0;
   for (int x = 0; x < width_; x++)

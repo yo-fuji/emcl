@@ -37,7 +37,7 @@ public:
 private:
   std::vector<std::pair<int, int>> free_cells_;
 
-  void normalize(void);
+  void normalize();
 };
 
 } // namespace emcl

@@ -34,14 +34,14 @@ void Pose::set(const Pose& p)
   t_ = p.t_;
 }
 
-std::string Pose::to_s(void)
+std::string Pose::to_s()
 {
   std::stringstream s;
   s << "x:" << x_ << "\ty:" << y_ << "\tt:" << t_;
   return s.str();
 }
 
-void Pose::normalizeAngle(void)
+void Pose::normalizeAngle()
 {
   while (t_ > M_PI)
     t_ -= 2 * M_PI;
@@ -73,12 +73,12 @@ void Pose::move(double length, double direction, double rotation,
   normalizeAngle();
 }
 
-bool Pose::nearlyZero(void)
+bool Pose::nearlyZero()
 {
   return fabs(x_) < 0.001 and fabs(y_) < 0.001 and fabs(t_) < 0.001;
 }
 
-uint16_t Pose::get16bitRepresentation(void)
+uint16_t Pose::get16bitRepresentation()
 {
   int tmp = t_ / M_PI * (1 << 15);
   while (tmp < 0)
