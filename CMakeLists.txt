@@ -1,39 +1,55 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.8)
 project(emcl)
 
-set(CMAKE_CXX_FLAGS "-std=c++17 -O3 ${CMAKE_CXX_FLAGS}")
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  geometry_msgs
-  tf2
-  tf2_ros
-)
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
 
+ament_auto_add_library(mcl SHARED
+  src/mcl_node.cpp
+  src/Mcl.cpp
+  src/Particle.cpp
+  src/OdomModel.cpp
+  src/Pose.cpp
+  src/Scan.cpp
+  src/LikelihoodFieldMap.cpp)
+ament_auto_add_library(emcl SHARED
+  src/emcl_node.cpp
+  src/ExpResetMcl.cpp
+  src/Mcl.cpp
+  src/Particle.cpp
+  src/OdomModel.cpp
+  src/Pose.cpp
+  src/Scan.cpp
+  src/LikelihoodFieldMap.cpp)
 
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES mcl
-#  CATKIN_DEPENDS roscpp
-#  DEPENDS system_lib
-)
+rclcpp_components_register_node(mcl
+  PLUGIN "emcl::MclNode"
+  EXECUTABLE mcl_node)
+rclcpp_components_register_node(emcl
+  PLUGIN "emcl::EMclNode"
+  EXECUTABLE emcl_node)
+target_compile_features(mcl PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(emcl PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
-include_directories(include ${catkin_INCLUDE_DIRS} )
+# Causes the visibility macros to use dllexport rather than dllimport,
+# which is appropriate when building the dll but not consuming it.
+target_compile_definitions(mcl PRIVATE "EMCL_BUILDING_LIBRARY")
+target_compile_definitions(emcl PRIVATE "EMCL_BUILDING_LIBRARY")
 
-add_library(Mcl src/Mcl.cpp)
-add_library(ExpResetMcl src/ExpResetMcl.cpp)
-add_library(Particle src/Particle.cpp)
-add_library(OdomModel src/OdomModel.cpp)
-add_library(Pose src/Pose.cpp)
-add_library(Scan src/Scan.cpp)
-add_library(LikelihoodFieldMap src/LikelihoodFieldMap.cpp)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  # the following line skips the linter which checks for copyrights
+  # comment the line when a copyright and license is added to all source files
+  set(ament_cmake_copyright_FOUND TRUE)
+  # the following line skips cpplint (only works in a git repo)
+  # comment the line when this package is in a git repo and when
+  # a copyright and license is added to all source files
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
-add_executable(mcl_node src/mcl_node.cpp)
-add_executable(emcl_node src/emcl_node.cpp)
-
-add_dependencies(mcl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(emcl_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(mcl_node Mcl Particle Pose Scan OdomModel LikelihoodFieldMap ${catkin_LIBRARIES})
-target_link_libraries(emcl_node Mcl ExpResetMcl Particle Pose Scan OdomModel LikelihoodFieldMap ${catkin_LIBRARIES})
-
+ament_auto_package()
