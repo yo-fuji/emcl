@@ -307,28 +307,30 @@ void MclNode::loop()
   printf("END: %02d.%09ld\n", tm.tm_sec, ts_end.tv_nsec);
   */
 
+  rclcpp::Time stamp;
   double x_var, y_var, t_var, xy_cov, yt_cov, tx_cov;
-  if (!pf_->meanPose(x, y, t, x_var, y_var, t_var, xy_cov, yt_cov, tx_cov)) {
+  if (!pf_->meanPose(stamp, x, y, t, x_var, y_var, t_var, xy_cov, yt_cov, tx_cov)) {
     RCLCPP_INFO(this->get_logger(), "can't get particle mean pose");
     return;
   }
 
-  publishOdomFrame(x, y, t);
-  publishPose(x, y, t, x_var, y_var, t_var, xy_cov, yt_cov, tx_cov);
-  publishParticles();
+  publishOdomFrame(stamp, x, y, t);
+  publishPose(stamp, x, y, t, x_var, y_var, t_var, xy_cov, yt_cov, tx_cov);
+  publishParticles(stamp);
 
   std_msgs::msg::Float32 alpha_msg;
   alpha_msg.data = static_cast<float>(pf_->alpha_);
   alpha_pub_->publish(alpha_msg);
 }
 
-void MclNode::publishPose(double x, double y, double t,
+void MclNode::publishPose(const rclcpp::Time& stamp,
+                          double x, double y, double t,
                           double x_dev, double y_dev, double t_dev,
                           double xy_cov, double yt_cov, double tx_cov)
 {
   geometry_msgs::msg::PoseWithCovarianceStamped p;
   p.header.frame_id = global_frame_id_;
-  p.header.stamp = this->now();
+  p.header.stamp = stamp;
   p.pose.pose.position.x = x;
   p.pose.pose.position.y = y;
 
@@ -350,7 +352,8 @@ void MclNode::publishPose(double x, double y, double t,
   pose_pub_->publish(p);
 }
 
-void MclNode::publishOdomFrame(double x, double y, double t)
+void MclNode::publishOdomFrame(const rclcpp::Time& stamp,
+                               double x, double y, double t)
 {
   geometry_msgs::msg::PoseStamped odom_to_map;
   try {
@@ -360,7 +363,7 @@ void MclNode::publishOdomFrame(double x, double y, double t)
 
     geometry_msgs::msg::PoseStamped tmp_tf_stamped;
     tmp_tf_stamped.header.frame_id = footprint_frame_id_;
-    tmp_tf_stamped.header.stamp = rclcpp::Time(0);
+    tmp_tf_stamped.header.stamp = stamp;
     tf2::toMsg(tmp_tf.inverse(), tmp_tf_stamped.pose);
 
     tf_->transform(tmp_tf_stamped, odom_to_map, odom_frame_id_);
@@ -381,10 +384,10 @@ void MclNode::publishOdomFrame(double x, double y, double t)
   tfb_->sendTransform(tmp_tf_stamped);
 }
 
-void MclNode::publishParticles()
+void MclNode::publishParticles(const rclcpp::Time& stamp)
 {
   geometry_msgs::msg::PoseArray cloud_msg;
-  cloud_msg.header.stamp = this->now();
+  cloud_msg.header.stamp = stamp;
   cloud_msg.header.frame_id = global_frame_id_;
   cloud_msg.poses.resize(pf_->particles_.size());
 

@@ -36,7 +36,8 @@ public:
   void initialize(double x, double y, double t);
 
   void setScan(const sensor_msgs::msg::LaserScan::ConstSharedPtr& msg);
-  bool meanPose(double& x_mean, double& y_mean, double& t_mean,
+  bool meanPose(rclcpp::Time& stamp,
+                double& x_mean, double& y_mean, double& t_mean,
                 double& x_var, double& y_var, double& t_var,
                 double& xy_cov, double& yt_cov, double& tx_cov);
 

@@ -15,6 +15,7 @@ Scan& Scan::operator=(const Scan& s)
     return *this;
 
   seq_ = s.seq_;
+  stamp_ = s.stamp_;
   scan_increment_ = s.scan_increment_;
   angle_max_ = s.angle_max_;
   angle_min_ = s.angle_min_;

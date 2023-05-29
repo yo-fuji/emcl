@@ -7,6 +7,8 @@
 #include <iostream>
 #include <vector>
 
+#include "rclcpp/rclcpp.hpp"
+
 namespace emcl
 {
 
@@ -14,6 +16,7 @@ class Scan
 {
 public:
   int seq_;
+  rclcpp::Time stamp_;
   int scan_increment_;
   double angle_max_;
   double angle_min_;

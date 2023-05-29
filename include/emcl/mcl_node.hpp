@@ -73,11 +73,13 @@ private:
   bool simple_reset_request_;
   double init_x_, init_y_, init_t_;
 
-  void publishPose(double x, double y, double t,
+  void publishPose(const rclcpp::Time& stamp,
+                   double x, double y, double t,
                    double x_dev, double y_dev, double t_dev,
                    double xy_cov, double yt_cov, double tx_cov);
-  void publishOdomFrame(double x, double y, double t);
-  void publishParticles();
+  void publishOdomFrame(const rclcpp::Time& stamp,
+                        double x, double y, double t);
+  void publishParticles(const rclcpp::Time& stamp);
   void sendTf();
   bool getOdomPose(double& x, double& y, double& yaw);
   bool getLidarPose(double& x, double& y, double& yaw, bool& inv);

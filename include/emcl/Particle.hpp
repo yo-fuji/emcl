@@ -7,6 +7,8 @@
 #include "emcl/LikelihoodFieldMap.hpp"
 #include "emcl/Pose.hpp"
 
+#include "rclcpp/rclcpp.hpp"
+
 namespace emcl
 {
 
@@ -19,6 +21,7 @@ public:
   bool wallConflict(LikelihoodFieldMap* map, Scan& scan, double threshold, bool replace);
   Pose p_;
   double w_;
+  rclcpp::Time stamp_;
 
   Particle& operator=(const Particle& p);
 

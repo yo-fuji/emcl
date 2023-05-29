@@ -110,16 +110,20 @@ void Mcl::sensorUpdate(double lidar_x, double lidar_y, double lidar_t, bool inv)
   if (valid_beams == 0)
     return;
 
-  for (auto& p : particles_)
+  for (auto& p : particles_) {
     p.w_ *= p.likelihood(map_.get(), scan);
+    p.stamp_ = scan.stamp_;
+  }
 
   /*
-  alpha_ = normalizeBelief()/valid_beams;
+  alpha_ = normalizeBelief() / valid_beams;
   if (alpha_ < alpha_threshold_ and valid_pct > open_space_threshold_){
     ROS_INFO("RESET");
     expansionReset();
-    for(auto &p : particles_)
+    for(auto& p : particles_) {
       p.w_ *= p.likelihood(map_.get(), scan);
+      p.stamp_ = scan.stamp_;
+    }
   }
   */
 
@@ -156,7 +160,8 @@ void Mcl::motionUpdate(double x, double y, double t)
   prev_odom_->set(*last_odom_);
 }
 
-bool Mcl::meanPose(double& x_mean, double& y_mean, double& t_mean,
+bool Mcl::meanPose(rclcpp::Time& stamp,
+                   double& x_mean, double& y_mean, double& t_mean,
                    double& x_dev, double& y_dev, double& t_dev,
                    double& xy_cov, double& yt_cov, double& tx_cov)
 {
@@ -206,6 +211,8 @@ bool Mcl::meanPose(double& x_mean, double& y_mean, double& t_mean,
   xy_cov = xy / (particles_.size() - 1);
   yt_cov = yt / (particles_.size() - 1);
   tx_cov = tx / (particles_.size() - 1);
+
+  stamp = particles_.front().stamp_;
   return true;
 }
 
@@ -225,6 +232,7 @@ void Mcl::setScan(const sensor_msgs::msg::LaserScan::ConstSharedPtr& msg)
     scan_.ranges_.resize(msg->ranges.size());
 
   scan_.seq_ = msg_seq_++;
+  scan_.stamp_ = msg->header.stamp;
   for (size_t i = 0; i < msg->ranges.size(); i++)
     scan_.ranges_[i] = msg->ranges[i];
 

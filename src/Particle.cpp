@@ -14,6 +14,7 @@ Particle::Particle(double x, double y, double t, double w)
   : p_(x, y, t)
 {
   w_ = w;
+  stamp_ = rclcpp::Time(0LL, RCL_ROS_TIME);
 }
 
 double Particle::likelihood(LikelihoodFieldMap* map, Scan& scan)
@@ -135,6 +136,7 @@ Particle& Particle::operator=(const Particle& p)
 {
   p_ = p.p_;
   w_ = p.w_;
+  stamp_ = p.stamp_;
   return *this;
 }
 
