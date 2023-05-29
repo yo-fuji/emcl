@@ -80,7 +80,6 @@ private:
   void publishOdomFrame(const rclcpp::Time& stamp,
                         double x, double y, double t);
   void publishParticles(const rclcpp::Time& stamp);
-  void sendTf();
   bool getOdomPose(double& x, double& y, double& yaw);
   bool getLidarPose(double& x, double& y, double& yaw, bool& inv);
 
