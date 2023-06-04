@@ -98,6 +98,7 @@ amclをemclに置換する手順を示します。
         ```
 
 5. [package.xml](https://github.com/ros-planning/navigation2/blob/main/nav2_bringup/package.xml)の依存パッケージにemclを追加します。
-    ```
-    <exec_depend>emcl</exec_depend>
-    ```
+    * 追加
+        ```
+        <exec_depend>emcl</exec_depend>
+        ```
