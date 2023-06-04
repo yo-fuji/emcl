@@ -61,18 +61,6 @@ MclNode::MclNode(const rclcpp::NodeOptions& options)
   if (!this->has_parameter("num_particles")) {
     this->declare_parameter("num_particles", 0);
   }
-  if (!this->has_parameter("alpha_threshold")) {
-    this->declare_parameter("alpha_threshold", 0.0);
-  }
-  if (!this->has_parameter("open_space_threshold")) {
-    this->declare_parameter("open_space_threshold", 0.05);
-  }
-  if (!this->has_parameter("expansion_radius_position")) {
-    this->declare_parameter("expansion_radius_position", 0.1);
-  }
-  if (!this->has_parameter("expansion_radius_orientation")) {
-    this->declare_parameter("expansion_radius_orientation", 0.2);
-  }
 
   if (!this->has_parameter("odom_fw_dev_per_fw")) {
     this->declare_parameter("odom_fw_dev_per_fw", 0.19);
