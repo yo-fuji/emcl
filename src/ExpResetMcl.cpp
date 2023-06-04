@@ -68,9 +68,9 @@ void ExpResetMcl::sensorUpdate(double lidar_x, double lidar_y, double lidar_t, b
     p.w_ *= p.likelihood(map_.get(), scan);
 
   alpha_ = normalizeBelief() / valid_beams;
-  RCLCPP_INFO(logger_, "ALPHA: %f / %f", alpha_, alpha_threshold_);
+  RCLCPP_DEBUG(logger_, "ALPHA: %f / %f", alpha_, alpha_threshold_);
   if (alpha_ < alpha_threshold_ and valid_pct > open_space_threshold_) {
-    RCLCPP_INFO(logger_, "RESET");
+    RCLCPP_INFO(logger_, "RESET: %f / %f", alpha_, alpha_threshold_);
     expansionReset();
     for (auto& p : particles_)
       p.w_ *= p.likelihood(map_.get(), scan);
