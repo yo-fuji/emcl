@@ -8,23 +8,15 @@ endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
 
-ament_auto_add_library(mcl SHARED
-  src/mcl_node.cpp
-  src/Mcl.cpp
-  src/Particle.cpp
-  src/OdomModel.cpp
-  src/Pose.cpp
-  src/Scan.cpp
-  src/LikelihoodFieldMap.cpp)
-ament_auto_add_library(emcl SHARED
-  src/emcl_node.cpp
-  src/ExpResetMcl.cpp
-  src/Mcl.cpp
-  src/Particle.cpp
-  src/OdomModel.cpp
-  src/Pose.cpp
-  src/Scan.cpp
-  src/LikelihoodFieldMap.cpp)
+ament_auto_add_library(Pose SHARED src/Pose.cpp)
+ament_auto_add_library(Scan SHARED src/Scan.cpp)
+ament_auto_add_library(LikelihoodFieldMap SHARED src/LikelihoodFieldMap.cpp)
+ament_auto_add_library(OdomModel SHARED src/OdomModel.cpp)
+ament_auto_add_library(Particle SHARED src/Particle.cpp)
+ament_auto_add_library(Mcl SHARED src/Mcl.cpp)
+ament_auto_add_library(ExpResetMcl SHARED src/ExpResetMcl.cpp)
+ament_auto_add_library(mcl SHARED src/mcl_node.cpp)
+ament_auto_add_library(emcl SHARED src/emcl_node.cpp)
 
 rclcpp_components_register_node(mcl
   PLUGIN "emcl::MclNode"
