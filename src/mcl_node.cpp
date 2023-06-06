@@ -19,64 +19,136 @@ MclNode::MclNode(const rclcpp::NodeOptions& options)
   : LifecycleNode("mcl_node", "", options)
 {
   if (!this->has_parameter("odom_freq")) {
-    this->declare_parameter("odom_freq", 20);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER;
+    descriptor.description = "frequency of odometry update";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_freq", 20, descriptor);
   }
 
   if (!this->has_parameter("global_frame_id")) {
-    this->declare_parameter("global_frame_id", std::string("map"));
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+    descriptor.description = "the frame for localization";
+    descriptor.read_only = true;
+    this->declare_parameter("global_frame_id", std::string("map"), descriptor);
   }
   if (!this->has_parameter("footprint_frame_id")) {
-    this->declare_parameter("footprint_frame_id", std::string("base_footprint"));
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+    descriptor.description = "the frame of the localized robot's base";
+    descriptor.read_only = true;
+    this->declare_parameter("footprint_frame_id", std::string("base_footprint"), descriptor);
   }
   if (!this->has_parameter("odom_frame_id")) {
-    this->declare_parameter("odom_frame_id", std::string("odom"));
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+    descriptor.description = "the frame for odometry";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_frame_id", std::string("odom"), descriptor);
   }
   if (!this->has_parameter("base_frame_id")) {
-    this->declare_parameter("base_frame_id", std::string("base_link"));
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_STRING;
+    descriptor.description = "the frame of the robot's base. It is used for calculating the position and orientation of the LiDAR";
+    descriptor.read_only = true;
+    this->declare_parameter("base_frame_id", std::string("base_link"), descriptor);
   }
   if (!this->has_parameter("use_map_topic")) {
-    this->declare_parameter("use_map_topic", true);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_BOOL;
+    descriptor.description = "when set to true, EMCL will subscribe to the map topic rather than making a service call to receive its map";
+    descriptor.read_only = true;
+    this->declare_parameter("use_map_topic", true, descriptor);
   }
 
   if (!this->has_parameter("laser_min_range")) {
-    this->declare_parameter("laser_min_range", 0.0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "threshold for discarding scans whose ranges are smaller than this value";
+    descriptor.read_only = true;
+    this->declare_parameter("laser_min_range", 0.0, descriptor);
   }
   if (!this->has_parameter("laser_max_range")) {
-    this->declare_parameter("laser_max_range", 100000000.0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "threshold for discarding scans whose ranges are larger than this value";
+    descriptor.read_only = true;
+    this->declare_parameter("laser_max_range", 100000000.0, descriptor);
   }
   if (!this->has_parameter("scan_increment")) {
-    this->declare_parameter("scan_increment", 1);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER;
+    descriptor.description = "increment number when beams are picked from their sequence; the larger this number is, the fewer number of beams are used for calculation of likelihood";
+    descriptor.read_only = true;
+    this->declare_parameter("scan_increment", 1, descriptor);
   }
 
   if (!this->has_parameter("initial_pose_x")) {
-    this->declare_parameter("initial_pose_x", 0.0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "initial x coordinate of particles";
+    descriptor.read_only = true;
+    this->declare_parameter("initial_pose_x", 0.0, descriptor);
   }
   if (!this->has_parameter("initial_pose_y")) {
-    this->declare_parameter("initial_pose_y", 0.0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "initial y coordinate of particles";
+    descriptor.read_only = true;
+    this->declare_parameter("initial_pose_y", 0.0, descriptor);
   }
   if (!this->has_parameter("initial_pose_a")) {
-    this->declare_parameter("initial_pose_a", 0.0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "initial yaw coordinate of particles";
+    descriptor.read_only = true;
+    this->declare_parameter("initial_pose_a", 0.0, descriptor);
   }
 
   if (!this->has_parameter("num_particles")) {
-    this->declare_parameter("num_particles", 0);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_INTEGER;
+    descriptor.description = "number of particles";
+    descriptor.read_only = true;
+    this->declare_parameter("num_particles", 0, descriptor);
   }
 
   if (!this->has_parameter("odom_fw_dev_per_fw")) {
-    this->declare_parameter("odom_fw_dev_per_fw", 0.19);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "standard deviation of forward motion noise by forward motion";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_fw_dev_per_fw", 0.19, descriptor);
   }
   if (!this->has_parameter("odom_fw_dev_per_rot")) {
-    this->declare_parameter("odom_fw_dev_per_rot", 0.0001);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "standard deviation of forward motion noise by rotational motion";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_fw_dev_per_rot", 0.0001, descriptor);
   }
   if (!this->has_parameter("odom_rot_dev_per_fw")) {
-    this->declare_parameter("odom_rot_dev_per_fw", 0.13);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "standard deviation of rotational motion noise by forward motion";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_rot_dev_per_fw", 0.13, descriptor);
   }
   if (!this->has_parameter("odom_rot_dev_per_rot")) {
-    this->declare_parameter("odom_rot_dev_per_rot", 0.2);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "standard deviation of rotational motion noise by rotational motion";
+    descriptor.read_only = true;
+    this->declare_parameter("odom_rot_dev_per_rot", 0.2, descriptor);
   }
 
   if (!this->has_parameter("laser_likelihood_max_dist")) {
-    this->declare_parameter("laser_likelihood_max_dist", 0.2);
+    rcl_interfaces::msg::ParameterDescriptor descriptor;
+    descriptor.type = rcl_interfaces::msg::ParameterType::PARAMETER_DOUBLE;
+    descriptor.description = "maximum distance to inflate occupied cells on the likelihood field map";
+    descriptor.read_only = true;
+    this->declare_parameter("laser_likelihood_max_dist", 0.2, descriptor);
   }
 }
 
