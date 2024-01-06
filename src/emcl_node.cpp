@@ -542,7 +542,7 @@ bool EMclNode::getOdomPose(double& x, double& y, double& yaw)
 {
   geometry_msgs::msg::PoseStamped ident;
   ident.header.frame_id = footprint_frame_id_;
-  ident.header.stamp = rclcpp::Time(0);
+  ident.header.stamp = scan_stamp_;
   tf2::toMsg(tf2::Transform::getIdentity(), ident.pose);
 
   geometry_msgs::msg::PoseStamped odom_pose;
